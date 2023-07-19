@@ -6,7 +6,7 @@
         "env":{
                 "NODE_ENV": "production",
                 "PORT": 5173,
-                "JWT_TOKEN": "jwt-token",
+                "JWT_TOKEN": "683OEWtQBb5758c1-c2efc4fd678IUGHt5bfa630d74-b8a004e342aa507b9f5PL",
                 "USER_NODEMAILER": "user@example.com",
                 "PASS_NODEMAILER": "password@example",
                 "MYSQL_HOST": "IP",
