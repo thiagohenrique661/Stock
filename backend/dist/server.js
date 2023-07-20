@@ -30,7 +30,7 @@ exports.conn = void 0;
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const routes_1 = require("../src/routes");
+const routes_1 = require("./routes");
 const node_path_1 = __importDefault(require("node:path"));
 const promise_1 = __importDefault(require("mysql2/promise"));
 if (process.env.NODE_ENV === 'development') {
@@ -79,4 +79,4 @@ connectionDatabase()
     app.listen(process.env.PORT);
     console.log("Connected port: " + process.env.PORT);
 });
-console.log("Connection");
+console.log(connectionDatabase);

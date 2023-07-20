@@ -1,16 +1,16 @@
 {
     "apps": [
         {
-        "name": "app",
+        "name": "Stock",
         "script": "../backend/dist/server.js",
         "env":{
                 "NODE_ENV": "production",
-                "PORT": 5173,
+                "PORT": 5002,
                 "JWT_TOKEN": "683OEWtQBb5758c1-c2efc4fd678IUGHt5bfa630d74-b8a004e342aa507b9f5PL",
-                "MYSQL_HOST": "localhost",
+                "MYSQL_HOST": "127.0.0.1",
                 "MYSQL_PORT": "3306",
                 "MYSQL_USER": "root",
-                "MYSQL_PASSWORD": "",
+                "MYSQL_PASSWORD": "stock123@",
                 "MYSQL_DB": "stock_testdb",
                 "dialect": "mysql"
             },

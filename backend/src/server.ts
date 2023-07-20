@@ -1,7 +1,7 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import { apiRouter } from '../src/routes';
+import { apiRouter } from './routes';
 import path from "node:path";
 import mysql from 'mysql2/promise';
 
@@ -52,6 +52,7 @@ const connectionDatabase = async () => {
     }
 }
 
+
 connectionDatabase()
     .then((connection) => {
         app.locals.connectionDatabase = connection;
@@ -59,4 +60,4 @@ connectionDatabase()
         console.log("Connected port: " + process.env.PORT);
     });
 
-console.log("Connection");
+console.log(connectionDatabase);
