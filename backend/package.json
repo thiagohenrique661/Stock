@@ -29,6 +29,7 @@
     "jsonwebtoken": "^9.0.1",
     "mysql2": "^3.5.2",
     "nodemailer": "^6.9.4",
-    "nodemailer-express-handlebars": "^6.1.0"
+    "nodemailer-express-handlebars": "^6.1.0",
+    "sequelize": "^6.32.1"
   }
 }

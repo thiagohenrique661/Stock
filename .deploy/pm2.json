@@ -7,13 +7,12 @@
                 "NODE_ENV": "production",
                 "PORT": 5173,
                 "JWT_TOKEN": "683OEWtQBb5758c1-c2efc4fd678IUGHt5bfa630d74-b8a004e342aa507b9f5PL",
-                "USER_NODEMAILER": "user@example.com",
-                "PASS_NODEMAILER": "password@example",
-                "MYSQL_HOST": "IP",
+                "MYSQL_HOST": "localhost",
                 "MYSQL_PORT": "3306",
                 "MYSQL_USER": "root",
-                "MYSQL_PASSWORD": "password",
-                "MYSQL_DB": "database"
+                "MYSQL_PASSWORD": "",
+                "MYSQL_DB": "stock_testdb",
+                "dialect": "mysql"
             },
             "watch": false
         }
