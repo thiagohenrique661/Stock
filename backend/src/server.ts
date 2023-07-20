@@ -8,10 +8,11 @@ import mysql from 'mysql2/promise';
 if (process.env.NODE_ENV === 'development') {
     dotenv.config();
     const Variable = [
-        "DB_HOST",
-        "DB_USER",
-        "DB_PASSWORD",
-        "DB_NAME",
+        "MYSQL_HOST",
+        "MYSQL_PORT",
+        "MYSQL_USER",
+        "MYSQL_PASSWORD",
+        "MYSQL_DB",
         "PORT"
     ];
 
@@ -31,6 +32,8 @@ export const conn = mysql.createPool({
     charset: "utf8",
     timezone: "utc",
 });
+
+console.log(process.env);
 
 const app = express();
 app.use(cookieParser());
@@ -59,5 +62,3 @@ connectionDatabase()
         app.listen(process.env.PORT);
         console.log("Connected port: " + process.env.PORT);
     });
-
-console.log(connectionDatabase);

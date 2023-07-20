@@ -36,10 +36,11 @@ const promise_1 = __importDefault(require("mysql2/promise"));
 if (process.env.NODE_ENV === 'development') {
     dotenv.config();
     const Variable = [
-        "DB_HOST",
-        "DB_USER",
-        "DB_PASSWORD",
-        "DB_NAME",
+        "MYSQL_HOST",
+        "MYSQL_PORT",
+        "MYSQL_USER",
+        "MYSQL_PASSWORD",
+        "MYSQL_DB",
         "PORT"
     ];
     Variable.forEach((key) => {
@@ -57,6 +58,7 @@ exports.conn = promise_1.default.createPool({
     charset: "utf8",
     timezone: "utc",
 });
+console.log(process.env);
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.static(node_path_1.default.join(__dirname, "webServer")));
@@ -79,4 +81,3 @@ connectionDatabase()
     app.listen(process.env.PORT);
     console.log("Connected port: " + process.env.PORT);
 });
-console.log(connectionDatabase);
