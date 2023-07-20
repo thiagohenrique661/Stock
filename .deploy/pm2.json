@@ -1,7 +1,7 @@
 {
     "apps": [
         {
-        "name": "Stock",
+        "name": "Stock:5002",
         "script": "../backend/dist/server.js",
         "env":{
                 "NODE_ENV": "production",

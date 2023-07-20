@@ -12,7 +12,6 @@ if (process.env.NODE_ENV === 'development') {
         "MYSQL_PORT",
         "MYSQL_USER",
         "MYSQL_PASSWORD",
-        "MYSQL_DB",
         "PORT"
     ];
 
@@ -21,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
             console.log("Variable not found: " + key);
             process.exit(1);
         }
-    })
+    });
 }
 
 export const conn = mysql.createPool({
@@ -33,32 +32,11 @@ export const conn = mysql.createPool({
     timezone: "utc",
 });
 
-console.log(process.env);
-
 const app = express();
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "webServer")));
-
 app.use(express.json());
 app.use("/api", apiRouter);
-
-const connectionDatabase = async () => {
-
-    try {
-        const connection = await mysql.createConnection(conn);
-        console.log("Connection created");
-        return connection;
-
-    } catch (error) {
-        console.log("Error creating connection", error);
-        process.exit(1);
-    }
-}
+app.listen(process.env.PORT, () => console.log("Connected port: " + process.env.PORT));
 
 
-connectionDatabase()
-    .then((connection) => {
-        app.locals.connectionDatabase = connection;
-        app.listen(process.env.PORT);
-        console.log("Connected port: " + process.env.PORT);
-    });

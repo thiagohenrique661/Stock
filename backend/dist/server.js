@@ -40,7 +40,6 @@ if (process.env.NODE_ENV === 'development') {
         "MYSQL_PORT",
         "MYSQL_USER",
         "MYSQL_PASSWORD",
-        "MYSQL_DB",
         "PORT"
     ];
     Variable.forEach((key) => {
@@ -58,26 +57,9 @@ exports.conn = promise_1.default.createPool({
     charset: "utf8",
     timezone: "utc",
 });
-console.log(process.env);
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.static(node_path_1.default.join(__dirname, "webServer")));
 app.use(express_1.default.json());
 app.use("/api", routes_1.apiRouter);
-const connectionDatabase = async () => {
-    try {
-        const connection = await promise_1.default.createConnection(exports.conn);
-        console.log("Connection created");
-        return connection;
-    }
-    catch (error) {
-        console.log("Error creating connection", error);
-        process.exit(1);
-    }
-};
-connectionDatabase()
-    .then((connection) => {
-    app.locals.connectionDatabase = connection;
-    app.listen(process.env.PORT);
-    console.log("Connected port: " + process.env.PORT);
-});
+app.listen(process.env.PORT, () => console.log("Connected port: " + process.env.PORT));
