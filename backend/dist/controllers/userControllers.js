@@ -1,64 +1,48 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-/*
-export const createUser: RequestHandler = async (req, res) => {
-    const { username, password, checkPass } = req.body;
-
-    if (!username)
-        return res.status(422).json({ message: false, text: "Dados inválidos" });
-    if (!password)
-        return res.status(422).json({ message: false, text: "Dados inválidos" });
-    if (!checkPass)
-        return res.status(422).json({ message: false, text: "Dados inválidos" });
-
-    if (checkPass !== password)
-        return res.status(422).json({ message: false, text: "Senhas diferentes" });
-
-    const [userExists] = await conn.query(
-        `SELECT username from Username where username=?`,
-        [username]
-    )
-
-    if (Array.isArray(userExists) && userExists.length > 0) {
-        res.status(422).json({ message: false, text: "Usuário existente" });
-    }
-
-    const hash = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, hash);
-
-    await conn.query(`INSERT INTO Username(username, password) VALUES (?, ?)`, [username, passwordHash]);
-
-    res.status(200).json({ msg: true, text: "Usuário cadastrado com sucesso" });
-}
-
-export const createSession: RequestHandler = async (req, res) => {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
+exports.createSession = exports.addUser = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const server_1 = require("../server");
+const addUser = async (req, res) => {
+    const { username, passwordUser, checkPassword } = req.body;
+    if (!username || !passwordUser || !checkPassword) {
         return res.status(400).json({ message: false, text: "Dados inválidos" });
     }
-
-    const [userExists] = await conn.query(
-        `SELECT username, password from Username where username=?`,
-        [username]
-    )
-
-    if (!Array.isArray(userExists) || userExists.length === 0) {
-        res.status(422).json({ message: false, text: "Usuário não existe" });
+    if (checkPassword != passwordUser) {
+        return res.status(400).json({ message: false, text: "Senhas diferentes" });
     }
-    const comparePasswords = await bcrypt.compare(password, userExists[0].password);
-    if (!comparePasswords)
-        return res.status(422).json({ msg: false, text: "Dados inválidos" });
-
-        const token = {
-            username: userExists
-          };
-
-    const sign = jwt.sign(token, process.env.JWT_TOKEN as string);
-
-    res.cookie('token', sign, { httpOnly: true })
+    const [userExist] = await server_1.conn.query(`SELECT username FROM Users WHERE username = ?`, [username]);
+    if (Array.isArray(userExist) && userExist.length > 0) {
+        res.status(400).json({ message: false, text: "Usuário existente" });
+    }
+    const hashBcrypt = await bcrypt_1.default.genSalt(10);
+    const passwordHash = await bcrypt_1.default.hash(passwordUser, hashBcrypt);
+    await server_1.conn.query(`INSERT INTO Users (username, userPassword) VALUES ('${username}', '${passwordHash}')`);
+};
+exports.addUser = addUser;
+const createSession = async (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        res.status(400).json({ message: false, text: "Dados inválidos" });
+    }
+    const [userExist] = await server_1.conn.query(`SELECT * FROM Users WHERE username = ?`, [username]);
+    if (!Array.isArray(userExist) || userExist.length === 0) {
+        res.status(400).json({ message: false, text: "Usuário não existe" });
+    }
+    const passwordCheck = await bcrypt_1.default.compare(password, userExist[0].password);
+    if (!passwordCheck) {
+        return res.status(400).json({ message: true, text: "Dados inválidos" });
+    }
+    const token = {
+        username: userExist.username
+    };
+    const sign = jsonwebtoken_1.default.sign(token, process.env.JWT_TOKEN);
+    res.cookie("user_token", sign, { httpOnly: true })
         .status(200)
         .json({ route: "/home" });
-}
-
-*/ 
+};
+exports.createSession = createSession;

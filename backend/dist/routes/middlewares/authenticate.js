@@ -9,15 +9,15 @@ const authenticate = (req, res, next) => {
     const authenticated = req.cookies["authenticated"];
     let verifyToken;
     if (!authenticated) {
-        return res.status(401).json({ status: "Invalid credentials", route: "/" });
+        return res.status(401).json({ status: "Token inexistente", route: "/" });
     }
     const token = process.env.JWT_TOKEN;
     try {
         verifyToken = jsonwebtoken_1.default.verify(String(authenticated), token);
-        req.usernameAdmin = verifyToken["usernameParent"];
+        req.username = verifyToken["username"];
     }
     catch (error) {
-        return res.status(422).json({ status: "Invalid credentials", route: "/" });
+        return res.status(422).json({ message: "Token inexistente", route: "/" });
     }
     next();
 };

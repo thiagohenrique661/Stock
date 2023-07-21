@@ -7,7 +7,8 @@
         <a href={navRef}>
             <h1>LOGO</h1>
         </a>
-    </nav>
+    </nav>    
+    <slot />
 </div>
 
 <style>
@@ -21,7 +22,7 @@
         background-color: #000;
         display: flex;
         text-align: center;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         padding: 0.25rem;
         height: 2.5rem;

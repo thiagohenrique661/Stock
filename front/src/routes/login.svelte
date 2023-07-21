@@ -3,16 +3,16 @@ import TxtLogin from "../components/input/txtLogin.svelte";
 import Nav from "../components/nav.svelte";
 import MainButton from "../components/button/mainButton.svelte";
 import {push} from "svelte-spa-router";
-// import {env} from "../../public/variable";
-// import Question from "../components/button/question.svelte";
-// import Rej from "../components/warn/rej.svelte";
+import {env} from "../../public/variable";
+import Question from "../components/button/question.svelte";
+import Rej from "../components/warn/rej.svelte";
 
 let username;
 let password;
 let displayWarn;
 let displayText;
 
-const createSession = async () => {
+const createSession = async () =>{
     const res = await fetch(`/api/login`, {
         method: "POST",
         credentials: "include",
@@ -39,6 +39,10 @@ const createSession = async () => {
 
 <Nav navRef="#">
 
+    <div id="title">
+        <h1>Login</h1>
+    </div>
+
     <main id="mainLogin" class="containerMain">
         <form id="formLogin">
             <div id="inputsLogin">
@@ -58,9 +62,14 @@ const createSession = async () => {
             <div id="btnLogin">
                 <MainButton buttonText="Entrar" buttonFunction={createSession}/>
             </div>
-        </form>
+            <div id="forgotPassword">
 
-     
+                <Question questionRef="#/forgotPassword" questionText="Esqueceu a senha?"/>
+
+                <Question questionRef="#/register" questionText="Cadastrar?"/>
+
+            </div>
+        </form>
     </main>
 </Nav>
 
@@ -95,15 +104,27 @@ const createSession = async () => {
         margin-top: 5rem;
     }
 
-    /* #title h1 {
+    #title h1 {
         margin-top: 5%;
         justify-content: center;
         align-items: center;
         text-align: center;
-        font-size: 2.5rem;
+        font-size: 2.625rem;
         font-family: Arial, Helvetica, sans-serif;
         font-weight: bold;
-    } */
+    }
+
+    #forgotPassword{
+        margin-top: 3rem;
+        margin-bottom: 10px;
+    }
+
+    #btnLogin{
+        width: 40%;
+        box-sizing: border-box;
+        padding-bottom: 3%;
+        padding-top: 8%;
+    }
 
 
     .containerMain{
