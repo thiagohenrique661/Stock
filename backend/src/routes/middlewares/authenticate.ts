@@ -16,18 +16,16 @@ export const authenticate: RequestHandler = (req: Request, res: Response, next: 
     const authenticated = req.cookies["authenticated"];
     let verifyToken;
     if (!authenticated) {
-        return res.status(401).json({ status: "Invalid credentials", route: "/" });
+        return res.status(401).json({ status: "Token inexistente", route: "/" });
     }
 
     const token = process.env.JWT_TOKEN as string;
 
     try {
-
         verifyToken = <JwtPayload>Jwt.verify(String(authenticated), token);
-        req.usernameAdmin = verifyToken["usernameParent"];
+        req.username = verifyToken["username"];
     } catch (error) {
-
-        return res.status(422).json({ status: "Invalid credentials", route: "/" });
+        return res.status(422).json({ message: "Token inexistente", route: "/" });
     }
 
     next();

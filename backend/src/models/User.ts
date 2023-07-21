@@ -1,22 +1,19 @@
 import mysql from "mysql2/promise";
 import { conn } from "../server";
 
-const CollabSchema = `
-CREATE TABLE IF NOT EXISTS User (
+const userSchema = `
+CREATE TABLE IF NOT EXISTS Users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  userParent VARCHAR(255) NOT NULL,
-  perm_registro BOOLEAN NOT NULL,
+  userPassword VARCHAR(255) NOT NULL,
   passwordResetToken VARCHAR(255),
-  passwordResetExpires DATE
-);
+  passwordResetExpires DATE);
 `;
 
-conn.query(CollabSchema).then(() => {
-  console.log(`CREATE TABLE COLLAB`);
+conn.query(userSchema).then(() => {
+  console.log(`CREATE TABLE Users`);
 }).catch((error) => {
-  console.log(`ERROR creating COLLAB`, error);
+  console.log(`ERROR creating Users`, error);
 });
 
 export default conn;

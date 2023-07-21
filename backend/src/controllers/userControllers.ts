@@ -2,66 +2,56 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { RequestHandler } from "express";
 import { conn } from "../server";
+import { RowDataPacket } from "mysql2";
 
-/*
-export const createUser: RequestHandler = async (req, res) => {
-    const { username, password, checkPass } = req.body;
+export const addUser: RequestHandler = async (req, res) => {
+    const { username, passwordUser, checkPassword } = req.body;
 
-    if (!username)
-        return res.status(422).json({ message: false, text: "Dados inválidos" });
-    if (!password)
-        return res.status(422).json({ message: false, text: "Dados inválidos" });
-    if (!checkPass)
-        return res.status(422).json({ message: false, text: "Dados inválidos" });
-
-    if (checkPass !== password)
-        return res.status(422).json({ message: false, text: "Senhas diferentes" });
-
-    const [userExists] = await conn.query(
-        `SELECT username from Username where username=?`,
-        [username]
-    )
-
-    if (Array.isArray(userExists) && userExists.length > 0) {
-        res.status(422).json({ message: false, text: "Usuário existente" });
+    if (!username || !passwordUser || !checkPassword) {
+        return res.status(400).json({ message: false, text: "Dados inválidos" });
     }
 
-    const hash = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, hash);
+    if (checkPassword != passwordUser) {
+        return res.status(400).json({ message: false, text: "Senhas diferentes" });
+    }
 
-    await conn.query(`INSERT INTO Username(username, password) VALUES (?, ?)`, [username, passwordHash]);
+    const [userExist] = await conn.query(`SELECT username FROM Users WHERE username = ?`, [username]);
 
-    res.status(200).json({ msg: true, text: "Usuário cadastrado com sucesso" });
+    if (Array.isArray(userExist) && userExist.length > 0) {
+        res.status(400).json({ message: false, text: "Usuário existente" });
+    }
+
+    const hashBcrypt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(passwordUser, hashBcrypt);
+
+    await conn.query(`INSERT INTO Users (username, userPassword) VALUES ('${username}', '${passwordHash}')`);
 }
 
 export const createSession: RequestHandler = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ message: false, text: "Dados inválidos" });
+        res.status(400).json({ message: false, text: "Dados inválidos" });
     }
 
-    const [userExists] = await conn.query(
-        `SELECT username, password from Username where username=?`,
-        [username]
-    )
+    const [userExist] = await conn.query(`SELECT * FROM Users WHERE username = ?`, [username]) as RowDataPacket[];
 
-    if (!Array.isArray(userExists) || userExists.length === 0) {
-        res.status(422).json({ message: false, text: "Usuário não existe" });
+    if (!Array.isArray(userExist) || userExist.length === 0) {
+        res.status(400).json({ message: false, text: "Usuário não existe" });
     }
-    const comparePasswords = await bcrypt.compare(password, userExists[0].password);
-    if (!comparePasswords)
-        return res.status(422).json({ msg: false, text: "Dados inválidos" });
 
-        const token = {
-            username: userExists
-          };
+    const passwordCheck = await bcrypt.compare(password, userExist[0].password);
+    if (!passwordCheck) {
+        return res.status(400).json({ message: true, text: "Dados inválidos" })
+    }
+
+    const token = {
+        username: userExist.username
+    }
 
     const sign = jwt.sign(token, process.env.JWT_TOKEN as string);
 
-    res.cookie('token', sign, { httpOnly: true })
+    res.cookie("user_token", sign, { httpOnly: true })
         .status(200)
         .json({ route: "/home" });
 }
-
-*/

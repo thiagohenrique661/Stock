@@ -2,7 +2,7 @@
     export let navRef;
 </script>
 
-<div>
+<div class="container">
     <nav id="nav">
         <a href={navRef}>
             <h1>LOGO</h1>
@@ -23,7 +23,12 @@
         text-align: center;
         justify-content: center;
         align-items: center;
-        padding: 4px;
+        padding: 0.25rem;
         height: 2.5rem;
+    }
+
+    .container{
+        height: 100%;
+        width: 100%;
     }
 </style>
