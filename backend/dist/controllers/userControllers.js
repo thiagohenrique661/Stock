@@ -19,9 +19,12 @@ const addUser = async (req, res) => {
     if (Array.isArray(userExist) && userExist.length > 0) {
         res.status(400).json({ message: false, text: "Usuário existente" });
     }
-    const hashBcrypt = await bcrypt_1.default.genSalt(10);
-    const passwordHash = await bcrypt_1.default.hash(passwordUser, hashBcrypt);
-    await server_1.conn.query(`INSERT INTO Users (username, userPassword) VALUES ('${username}', '${passwordHash}')`);
+    else {
+        const hashBcrypt = await bcrypt_1.default.genSalt(10);
+        const passwordHash = await bcrypt_1.default.hash(passwordUser, hashBcrypt);
+        await server_1.conn.query(`INSERT INTO Users (username, userPassword) VALUES ('${username}', '${passwordHash}')`);
+        return res.status(200).json({ message: true, text: "Usuário inserido com sucesso" });
+    }
 };
 exports.addUser = addUser;
 const createSession = async (req, res) => {
@@ -29,14 +32,15 @@ const createSession = async (req, res) => {
     if (!username || !password) {
         res.status(400).json({ message: false, text: "Dados inválidos" });
     }
-    const [userExist] = await server_1.conn.query(`SELECT * FROM Users WHERE username = ?`, [username]);
+    const [userExist] = await server_1.conn.query(`SELECT * FROM users WHERE username = ?`, [username]);
     if (!Array.isArray(userExist) || userExist.length === 0) {
         res.status(400).json({ message: false, text: "Usuário não existe" });
     }
-    const passwordCheck = await bcrypt_1.default.compare(password, userExist[0].password);
+    const passwordCheck = await bcrypt_1.default.compare(password, userExist.password);
     if (!passwordCheck) {
         return res.status(400).json({ message: true, text: "Dados inválidos" });
     }
+    console.log(passwordCheck);
     const token = {
         username: userExist.username
     };
