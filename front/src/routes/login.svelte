@@ -14,7 +14,7 @@ let displayText;
 
 const createSession = async () =>{
     const res = await fetch(`/api/login`, {
-        method: "POST",
+        method: "Post",
         credentials: "include",
         headers: {
             "content-type": "application/json",
@@ -38,7 +38,6 @@ const createSession = async () =>{
 </script>
 
 <Nav navRef="#">
-
     <div id="title">
         <h1>Login</h1>
     </div>
@@ -67,7 +66,10 @@ const createSession = async () =>{
                 <Question questionRef="#/forgotPassword" questionText="Esqueceu a senha?"/>
 
                 <Question questionRef="#/register" questionText="Cadastrar?"/>
+            </div>
 
+            <div id="warn-rej">
+                <Rej dis={displayWarn} text={displayText}/>
             </div>
         </form>
     </main>

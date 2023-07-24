@@ -2,8 +2,8 @@
   import Router from "svelte-spa-router";
 
   import Login from "./routes/login.svelte";
-  // import Register from "./routes/register.svelte";
-  // import AddUser from "./routes/authScreens/addUser.svelte";
+  //import Register from "./routes/register.svelte";
+  import AddUser from "./routes/authScreens/addUser.svelte";
   // import Home from "./routes/authScreens/home.svelte";
 </script>
 
@@ -11,6 +11,7 @@
   <Router 
     routes={{
       "/": Login,
+      "/add/user": Register,
 
     }}
   />
