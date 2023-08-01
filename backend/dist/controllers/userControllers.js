@@ -36,7 +36,7 @@ const createSession = async (req, res) => {
     if (!Array.isArray(userExist) || userExist.length === 0) {
         res.status(400).json({ message: false, text: "Usuário não existe" });
     }
-    const passwordCheck = await bcrypt_1.default.compare(password, userExist.password);
+    const passwordCheck = await bcrypt_1.default.compare(password, userExist[0].password);
     if (!passwordCheck) {
         return res.status(400).json({ message: true, text: "Dados inválidos" });
     }
