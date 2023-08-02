@@ -1,10 +1,6 @@
 import express from 'express';
-import { addUser, createSession } from '../controllers/userControllers';
-import { authenticate } from './middlewares/authenticate';
-
-
-
+import UserController from '../controllers/userControllers';
 
 export const apiRouter = express.Router();
 
-
+apiRouter.post('/create/user', new UserController().createUser);

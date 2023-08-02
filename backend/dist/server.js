@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.conn = void 0;
+exports.connection = void 0;
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'development') {
         }
     });
 }
-exports.conn = promise_1.default.createPool({
+exports.connection = promise_1.default.createPool({
     host: process.env["MYSQL_HOST"],
     user: process.env["MYSQL_USER"],
     password: process.env["MYSQL_PASSWORD"],
