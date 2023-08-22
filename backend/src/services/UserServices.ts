@@ -1,5 +1,6 @@
 import { User, UserObject } from "../entities/User";
 import bcrypt from "bcrypt";
+import  jwt  from "jsonwebtoken";
 
 export default class UserServices {
   async createUser(properties: UserObject) {
@@ -13,10 +14,10 @@ export default class UserServices {
         const saltRounds = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
-        // Atualizar a senha no objeto de propriedades antes de criar o usuário
+        
         const passwordHashed = { password: passwordHash };
 
-        const insertUser = await userEntity.createUser(passwordHash); // Passar a senha criptografada diretamente
+        const insertUser = await userEntity.createUser(passwordHash); 
         return insertUser;
       }
 
@@ -27,4 +28,36 @@ export default class UserServices {
       throw new Error(`Erro ao obter dados do usuário: ${error}`);
     }
   }
+
+  async authenticateUser(properties: UserObject) {
+  
+    const { email, password } = properties;
+    
+    try {
+      const userEntity = new User(properties);
+      const userExists = await userEntity.getUser();
+    
+      if (userExists && userExists.length > 0) {
+        const user = userExists[0];
+        
+
+        const passwordHash = await bcrypt.compare(password, user.userPassword);
+
+        if(passwordHash) {
+          const token = jwt.sign({userId: user.id}, 'secret', {expiresIn: '1h'});
+  
+          return token;
+
+        } else{
+          throw new Error(`Senha incorreta`);
+        }
+        
+
+      }
+    } catch (error) {
+      
+    }
+  
+  }
+  
 }

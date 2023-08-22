@@ -30,6 +30,17 @@ export class User {
         } 
     }
 
+    async getUser(): Promise<RowDataPacket[]> {
+        try {
+            const [selectResult]: [RowDataPacket[], FieldPacket[]] = await connection.query(`
+            SELECT email, userPassword FROM users WHERE email =? `, [this.email]);
+           
+            return selectResult;
+        } catch (error) {
+            throw new Error(`Erro ao obter dados: ${error}`);
+        }
+    }
+
     async createUser (passwordHash:string):Promise<ResultSetHeader>{
         try {
         const [insertResult]: [ResultSetHeader, FieldPacket[]] = await connection.query(`

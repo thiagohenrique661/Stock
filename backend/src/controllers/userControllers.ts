@@ -28,4 +28,29 @@ export default class UserController {
         }
         
     }
+
+    async authenticateUser(req: Request, res: Response) {
+        const userServices  = new UserServices();
+
+        try {
+            const {email, password} = req.body;
+
+            if(!email || !password) {
+                return res.status(400).json({message: false, text: "Dados inválidos"});
+            }
+
+            const token = await userServices.authenticateUser(req.body);
+            
+
+            if (token) {
+                return res.status(200).json({ message: true, text: "Logado com sucesso!", token });
+            } else {
+                return res.status(401).json({ message: false, text: "Não foi possível logar" });
+            }   
+        } catch (error) {
+            console.error(error);
+            return res.status(400).json({message: false, text: "Não foi possível logar"});
+            
+        }
+    }
 }

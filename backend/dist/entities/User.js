@@ -18,6 +18,16 @@ class User {
             throw new Error(`Erro ao obter usuário: ${error}`);
         }
     }
+    async getUser() {
+        try {
+            const [selectResult] = await server_1.connection.query(`
+            SELECT email, userPassword FROM users WHERE email =? `, [this.email]);
+            return selectResult;
+        }
+        catch (error) {
+            throw new Error(`Erro ao obter dados: ${error}`);
+        }
+    }
     async createUser(passwordHash) {
         try {
             const [insertResult] = await server_1.connection.query(`
