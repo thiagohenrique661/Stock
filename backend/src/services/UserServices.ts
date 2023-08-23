@@ -29,35 +29,32 @@ export default class UserServices {
     }
   }
 
-  async authenticateUser(properties: UserObject) {
-  
+  async authenticateUser(properties: UserObject): Promise<{ token: string; userId: string }> {
     const { email, password } = properties;
-    
+
     try {
-      const userEntity = new User(properties);
-      const userExists = await userEntity.getUser();
+        const userEntity = new User(properties);
+        const userExists = await userEntity.getUser();
     
-      if (userExists && userExists.length > 0) {
-        const user = userExists[0];
-        
+        if (userExists && userExists.length > 0) {
+            const user = userExists[0];
+            
+            const passwordHash = await bcrypt.compare(password, user.userPassword);
 
-        const passwordHash = await bcrypt.compare(password, user.userPassword);
-
-        if(passwordHash) {
-          const token = jwt.sign({userId: user.id}, 'secret', {expiresIn: '1h'});
-  
-          return token;
-
-        } else{
-          throw new Error(`Senha incorreta`);
+            if (passwordHash) {
+              const token = jwt.sign({ userId: user.id }, 'secret', { expiresIn: '1d' });
+                
+                return { token, userId: user.id }; // Retorna o token e userId
+            } else {
+                throw new Error(`Senha incorreta`);
+            }
+        } else {
+            throw new Error(`Usuário não encontrado`); // Trate o caso em que o usuário não é encontrado
         }
-        
-
-      }
     } catch (error) {
-      
+        console.error(error);
+        throw new Error(`Erro ao autenticar usuário`);
     }
-  
-  }
+}
   
 }

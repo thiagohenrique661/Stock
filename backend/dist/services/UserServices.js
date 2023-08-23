@@ -36,15 +36,20 @@ class UserServices {
                 const user = userExists[0];
                 const passwordHash = await bcrypt_1.default.compare(password, user.userPassword);
                 if (passwordHash) {
-                    const token = jsonwebtoken_1.default.sign({ userId: user.id }, 'secret', { expiresIn: '1h' });
-                    return token;
+                    const token = jsonwebtoken_1.default.sign({ userId: user.id }, 'secret', { expiresIn: '1d' });
+                    return { token, userId: user.id }; // Retorna o token e userId
                 }
                 else {
                     throw new Error(`Senha incorreta`);
                 }
             }
+            else {
+                throw new Error(`Usuário não encontrado`); // Trate o caso em que o usuário não é encontrado
+            }
         }
         catch (error) {
+            console.error(error);
+            throw new Error(`Erro ao autenticar usuário`);
         }
     }
 }

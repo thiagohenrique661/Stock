@@ -3,6 +3,14 @@ import { Request, Response } from "express";
 
 
 export default class UserController {
+
+    index(req: Request, res: Response) {
+       
+        return res.send({ userId: req.userId });
+    }
+
+
+
     async createUser(req: Request, res: Response){
         const userServices = new UserServices();
 
@@ -39,8 +47,9 @@ export default class UserController {
                 return res.status(400).json({message: false, text: "Dados inválidos"});
             }
 
-            const token = await userServices.authenticateUser(req.body);
-            
+            const { token, userId} = await userServices.authenticateUser(req.body);
+
+           
 
             if (token) {
                 return res.status(200).json({ message: true, text: "Logado com sucesso!", token });
@@ -52,5 +61,7 @@ export default class UserController {
             return res.status(400).json({message: false, text: "Não foi possível logar"});
             
         }
+
+        
     }
 }

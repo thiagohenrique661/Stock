@@ -33,7 +33,7 @@ export class User {
     async getUser(): Promise<RowDataPacket[]> {
         try {
             const [selectResult]: [RowDataPacket[], FieldPacket[]] = await connection.query(`
-            SELECT email, userPassword FROM users WHERE email =? `, [this.email]);
+            SELECT id, email, userPassword FROM users WHERE email =? `, [this.email]);
            
             return selectResult;
         } catch (error) {

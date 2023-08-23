@@ -5,6 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserServices_1 = __importDefault(require("../services/UserServices"));
 class UserController {
+    index(req, res) {
+        return res.send({ userId: req.userId });
+    }
     async createUser(req, res) {
         const userServices = new UserServices_1.default();
         try {
@@ -29,7 +32,7 @@ class UserController {
             if (!email || !password) {
                 return res.status(400).json({ message: false, text: "Dados inválidos" });
             }
-            const token = await userServices.authenticateUser(req.body);
+            const { token, userId } = await userServices.authenticateUser(req.body);
             if (token) {
                 return res.status(200).json({ message: true, text: "Logado com sucesso!", token });
             }
